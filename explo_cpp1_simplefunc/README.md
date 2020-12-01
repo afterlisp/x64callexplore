@@ -34,11 +34,12 @@ Note that AL is the low 8 bits value of AX.
 AX is the low 16 bits value of EAX. 
 And EAX is the low  32 bits value of RAX.
 
-*12345678*12345678*12345678*12345678*12345678*12345678*12345678*12345678*
-|        |        |        |        |       |         |    AH  |    AL  |
-|        |        |        |        |       |         |       AX        |
-|                                   |                EAX                |
-|                                  RAX                                  |
+|12345678|12345678|12345678|12345678|12345678|12345678|12345678|12345678|
+|--------|--------|--------|--------|--------|--------|--------|--------|
+|        |        |        |        |        |        |    AH  |    AL  |
+|        |        |        |        |        |        |    AX  |    AX  |
+|        |        |        |        |   EAX  |   EAX  |   EAX  |   EAX  |
+|   RAX  |   RAX  |   RAX  |   RAX  |   RAX  ||  RAX  |   RAX  |   RAX  |                                                
 
 
 Note that some others  general registers that have such sub registers are RBX, RCX and RDX. Note that other registers have same subdivions
