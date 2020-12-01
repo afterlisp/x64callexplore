@@ -60,7 +60,7 @@ And EAX is the low  32 bits value of RAX.
 |        |        |        |        |        |        |    AH  |    AL  |
 |        |        |        |        |        |        |    AX  |    AX  |
 |        |        |        |        |   EAX  |   EAX  |   EAX  |   EAX  |
-|   RAX  |   RAX  |   RAX  |   RAX  |   RAX  ||  RAX  |   RAX  |   RAX  |                                                
+|   RAX  |   RAX  |   RAX  |   RAX  |   RAX  |   RAX  |   RAX  |   RAX  |                                                
 
 
 Note that some others  general registers that have such sub registers are RBX, RCX and RDX. Note that other registers have same subdivions
