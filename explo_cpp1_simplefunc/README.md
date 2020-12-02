@@ -5,7 +5,7 @@
  ###
  main.cpp is a small nasm program that contains a function called myfunc()
  
- '''cpp
+ ```cpp
  
 #include <iostream>                   // loads the standard library for io
 extern "C" int myfunc(void);             // declare our asm function as an external one returning an int and with no arguments
@@ -14,7 +14,7 @@ int main() {
 	std::cout<<"Foo returns "<<myfunc()<<"\n";        // call of our function ...
 	return 0; // return 0 to say all is ok
 }
-'''
+```
 
 Note that this function is not underscored as you could find some using old compiler models
 
@@ -25,14 +25,14 @@ global myfunc
 myfunc:
 	mov eax,66
 	ret
-'''
+```
 	
 section text
 ============
 When you use C or C++ we do not use such memory map directive. Synthetically (and presumbaly not real true) a program as a processus in
 memory has the following structure :
 
-'''
+```
 zone .text
 (program code)
 zone .data
@@ -41,7 +41,7 @@ zone heap
 (dynamic data as with malloc())
 zone stack
 (execution context)
-'''
+```
 
 So in .text zone we will put some code. Note that is a good practice to put "section text" even if it is in some assembly optional...
 
@@ -90,7 +90,7 @@ The name of the type is different from int, uint,... but you are sure that the l
 This is defined into  <cstdint>
 For instance main2.cpp contains such usage
 
-'''cpp
+```cpp
 #include <cstdint>
 #include <iostream>
 
@@ -102,11 +102,12 @@ int main() {
 	std::cout<<"myfunc returns "<<myfunc()<<"\n";
 	return 0;
 }
-'''
+```
 
 extern now indicates an explicit length of 32 bytes for the return of function.
-
+```
 g++ myfunc.obj main2.cpp -o main2.exe
+```
 
 Will give the same result as previous
 
@@ -123,27 +124,31 @@ global myfunc
 myfunc:
 	mov rax,3456789ABCFEDA7Ch
 	ret
-'''
+```
 
 #
+```
 nasm -fwin64 myfunc2.asm
 g++ -Wall -no-pie myfunc2.obj main2.cpp -o main3.exe
 main3.exe
+```
+
 myfunc returns -1124148612
 
 Why ?  because the function is an int with 32 bits, only 32 bits are copied from rax, in big endian (ABCD) the full number  in hexa and decimal is as 
 
-|   |   hex       |     dec     |
-|---|-------------|-------------|
-| 0	| 34 56 78 9A |   878082202 |
-| 4	| BC FE DA 7C |	-1124148612 |
+| pos |   hex       |     dec     |
+|-----|-------------|-------------|
+| 0-3 | 34 56 78 9A |   878082202 |
+| 4-7 | BC FE DA 7C |	-1124148612 |
 
 So the return will contain the low part of RAX that contains 34 56 78 9A BC FE DA 7C in hexa, so it returns (4)  BC FE DA 7C, 
 FE DA BC starts with a bit with 1 (B=1011 in BC),
 it is  as the negative number -1124148612...
 Conclusion : works good as only a 32 bits value is returned ! 
 Solution : to have the rigth result use a 64 bits value as in main3.cpp
-'''cpp
+
+```cpp
 #include <cstdint>
 #include <iostream>
 
@@ -155,20 +160,24 @@ int main() {
 	std::cout<<"myfunc returns "<<myfunc()<<"\n";
 	return 0;
 }
-'''
+```
 
 if we compile as a main4.exe we will have :
+```
 main4.exe
 myfunc returns 3771334343960484476
-
+```
 
 Retrieve the ASM from .EXE
 ==========================
 Use the tool utility objdump that is given with mingw 
+```
 objdump -S --disassemble main2.exe > main2.dump
+```
 See the first line :
+```
 smain2.exe:     file format pei-x86-64 
-
+```
 Format PEI ?  Portable Executable Image (format) - this term does not exist into Microsoft Doc., only PE...
 PE is normally the format defined by Microoft to build an executable image. as,they say :
 " structure of executable (image) files and object files under the Windows family of operating systems"
@@ -183,14 +192,14 @@ https://opensource.apple.com/source/gdb/gdb-1515/src/bfd/libpei.h
 This is to prevent people when they try to execute 64 bits on less platforms (like DOS) and prints a message when you launch
 the exe as 'This app must be run under Windows' (message vendor could change from who generates the PE image)
 
-In te previous file, search "myfunc", you will find a block like :
+In the previous file, search "myfunc", you will find a block like :
 ```assembly
 0000000000401550 <myfunc>:
   401550:	b8 42 00 00 00       	mov    $0x42,%eax
   401555:	c3                   	retq   
   401556:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
   40155d:	00 00 00 
-'''
+```
   
   This is the desassembly of the content of myfunc. Note that this is not NASM syntax as the C follows the "“AT&T syntax” for x86-64 assembly. 
   For the “Intel syntax, used by NASM there is no standard mingw utility... bad 
@@ -229,7 +238,7 @@ In te previous file, search "myfunc", you will find a block like :
   4015b0:	5b                   	pop    %rbx
   4015b1:	5d                   	pop    %rbp
   4015b2:	c3                   	retq   
-  '''
+  ```
   
   
   
