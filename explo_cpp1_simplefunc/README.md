@@ -105,8 +105,9 @@ int main() {
 ```
 
 extern now indicates an explicit length of 32 bytes for the return of function.
-
+```
 g++ myfunc.obj main2.cpp -o main2.exe
+```
 
 Will give the same result as previous
 
@@ -126,17 +127,20 @@ myfunc:
 ```
 
 #
+```
 nasm -fwin64 myfunc2.asm
 g++ -Wall -no-pie myfunc2.obj main2.cpp -o main3.exe
 main3.exe
+```
+
 myfunc returns -1124148612
 
 Why ?  because the function is an int with 32 bits, only 32 bits are copied from rax, in big endian (ABCD) the full number  in hexa and decimal is as 
 
-|   |   hex       |     dec     |
-|---|-------------|-------------|
-| 0	| 34 56 78 9A |   878082202 |
-| 4	| BC FE DA 7C |	-1124148612 |
+| pos |   hex       |     dec     |
+|-----|-------------|-------------|
+| 0-3 | 34 56 78 9A |   878082202 |
+| 4-7 | BC FE DA 7C |	-1124148612 |
 
 So the return will contain the low part of RAX that contains 34 56 78 9A BC FE DA 7C in hexa, so it returns (4)  BC FE DA 7C, 
 FE DA BC starts with a bit with 1 (B=1011 in BC),
@@ -159,17 +163,21 @@ int main() {
 ```
 
 if we compile as a main4.exe we will have :
+```
 main4.exe
 myfunc returns 3771334343960484476
-
+```
 
 Retrieve the ASM from .EXE
 ==========================
 Use the tool utility objdump that is given with mingw 
+```
 objdump -S --disassemble main2.exe > main2.dump
+```
 See the first line :
+```
 smain2.exe:     file format pei-x86-64 
-
+```
 Format PEI ?  Portable Executable Image (format) - this term does not exist into Microsoft Doc., only PE...
 PE is normally the format defined by Microoft to build an executable image. as,they say :
 " structure of executable (image) files and object files under the Windows family of operating systems"
