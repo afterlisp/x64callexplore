@@ -143,6 +143,7 @@ FE DA BC starts with a bit with 1 (B=1011 in BC),
 it is  as the negative number -1124148612...
 Conclusion : works good as only a 32 bits value is returned ! 
 Solution : to have the rigth result use a 64 bits value as in main3.cpp
+
 '''cpp
 #include <cstdint>
 #include <iostream>
@@ -183,7 +184,7 @@ https://opensource.apple.com/source/gdb/gdb-1515/src/bfd/libpei.h
 This is to prevent people when they try to execute 64 bits on less platforms (like DOS) and prints a message when you launch
 the exe as 'This app must be run under Windows' (message vendor could change from who generates the PE image)
 
-In te previous file, search "myfunc", you will find a block like :
+In the previous file, search "myfunc", you will find a block like :
 ```assembly
 0000000000401550 <myfunc>:
   401550:	b8 42 00 00 00       	mov    $0x42,%eax
