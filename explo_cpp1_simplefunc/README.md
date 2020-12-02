@@ -5,7 +5,7 @@
  ###
  main.cpp is a small nasm program that contains a function called myfunc()
  
- '''cpp
+ ```cpp
  
 #include <iostream>                   // loads the standard library for io
 extern "C" int myfunc(void);             // declare our asm function as an external one returning an int and with no arguments
@@ -14,7 +14,7 @@ int main() {
 	std::cout<<"Foo returns "<<myfunc()<<"\n";        // call of our function ...
 	return 0; // return 0 to say all is ok
 }
-'''
+```
 
 Note that this function is not underscored as you could find some using old compiler models
 
@@ -25,14 +25,14 @@ global myfunc
 myfunc:
 	mov eax,66
 	ret
-'''
+```
 	
 section text
 ============
 When you use C or C++ we do not use such memory map directive. Synthetically (and presumbaly not real true) a program as a processus in
 memory has the following structure :
 
-'''
+```
 zone .text
 (program code)
 zone .data
@@ -41,7 +41,7 @@ zone heap
 (dynamic data as with malloc())
 zone stack
 (execution context)
-'''
+```
 
 So in .text zone we will put some code. Note that is a good practice to put "section text" even if it is in some assembly optional...
 
@@ -90,7 +90,7 @@ The name of the type is different from int, uint,... but you are sure that the l
 This is defined into  <cstdint>
 For instance main2.cpp contains such usage
 
-'''cpp
+```cpp
 #include <cstdint>
 #include <iostream>
 
@@ -102,7 +102,7 @@ int main() {
 	std::cout<<"myfunc returns "<<myfunc()<<"\n";
 	return 0;
 }
-'''
+```
 
 extern now indicates an explicit length of 32 bytes for the return of function.
 
@@ -123,7 +123,7 @@ global myfunc
 myfunc:
 	mov rax,3456789ABCFEDA7Ch
 	ret
-'''
+```
 
 #
 nasm -fwin64 myfunc2.asm
@@ -144,7 +144,7 @@ it is  as the negative number -1124148612...
 Conclusion : works good as only a 32 bits value is returned ! 
 Solution : to have the rigth result use a 64 bits value as in main3.cpp
 
-'''cpp
+```cpp
 #include <cstdint>
 #include <iostream>
 
@@ -156,7 +156,7 @@ int main() {
 	std::cout<<"myfunc returns "<<myfunc()<<"\n";
 	return 0;
 }
-'''
+```
 
 if we compile as a main4.exe we will have :
 main4.exe
@@ -191,7 +191,7 @@ In the previous file, search "myfunc", you will find a block like :
   401555:	c3                   	retq   
   401556:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
   40155d:	00 00 00 
-'''
+```
   
   This is the desassembly of the content of myfunc. Note that this is not NASM syntax as the C follows the "“AT&T syntax” for x86-64 assembly. 
   For the “Intel syntax, used by NASM there is no standard mingw utility... bad 
@@ -230,7 +230,7 @@ In the previous file, search "myfunc", you will find a block like :
   4015b0:	5b                   	pop    %rbx
   4015b1:	5d                   	pop    %rbp
   4015b2:	c3                   	retq   
-  '''
+  ```
   
   
   
