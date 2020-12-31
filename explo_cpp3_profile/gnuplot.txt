@@ -1,0 +1,6 @@
+use gnuplot 5.2.8 from sourceforge (install the mingw version works fine on windows 10 64)
+launch gnuplot in console mode
+go where is the script
+gnuplot>cd "C:/Perso/gitprojects/x64callexplore/explo_cpp3_profile"
+launch the script that draws curves with point
+gnuplot>load("plotsamples.gnuplot")
